@@ -1,0 +1,18 @@
+<title>Pokemon Search Result</title>
+{% extends 'pokedex/base.html' %}
+
+{% block content %}
+{% include 'pokedex/pokemon_search.html' %}
+    {% if pokemons %}
+        <p> Found {{ pokemons|length }} pokemon{{ pokemons|pluralize }}</p>
+        <ul>
+            {% for pokemon in pokemons %} 
+                <li>{{ pokemon }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+<p>
+    <a href={% url 'pokedex:pokemon-dex' %}><button >Go back to PokeDex</button></a>
+    <a href={% url 'pokedex:pokemon-list' %}><button >Go to Pokemon List</button></a>
+</p>
+{% endblock %}

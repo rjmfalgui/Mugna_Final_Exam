@@ -1,0 +1,15 @@
+<title>Pokemon Search</title>
+{% extends 'pokedex/base.html' %} {% block content %}
+<h1>Search a Pokemon</h1>
+{% if error %}
+  <p style="color: red;"> Please submit a search term. </p>
+{% endif %} 
+<form method="GET">
+  <input type="text" name="query" placeholder="Input Pokemon name here..." />
+  <input type="submit" value="Search" />
+</form>
+{% endblock %}
+<p>
+    <a href={% url 'pokedex:pokemon-dex' %}><button >Go back to PokeDex</button></a>
+    <a href={% url 'pokedex:pokemon-list' %}><button >Go to Pokemon List</button></a>
+</p>

@@ -1,0 +1,9 @@
+<title>Pokemon List</title>
+{% extends 'pokedex/base.html'%} {% block content %}
+<h1>List of Pokemons</h1>
+<b>Click the name of the Pokemon to go to know more about its details.</b>
+{% for pokemon in list_of_pokemons %}
+<p>Pokemon ID No.: <b>{{ pokemon.id }}</b>, Pokemon Name: <a href={% url 'pokedex:pokemon-details' pokemon.id %}><b>{{ pokemon.name }}</b></a></p>
+{% endfor %} 
+<a href={% url 'pokedex:pokemon-dex' %}><button type="submit">Go to PokeDex</button></a>
+{% endblock %}

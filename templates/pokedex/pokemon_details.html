@@ -1,0 +1,20 @@
+<title>Pokemon Details</title>
+{% extends 'pokedex/base.html'%} {% block content %}
+<h1>Pokemon Details</h1>
+<h2>Pokemon: {{ pokemon_id }} </h2>
+
+<ul>
+    <li>Pokemon ID No.: <b>{{ pokemon_id.id }}</b></li>
+    <li>Pokemon Height: <b>{{ pokemon_id.height }} ft.</b></li>
+    <li>Pokemon Weight: <b>{{ pokemon_id.weight }} kg.</b></li>
+</ul>
+
+<p>
+    <a href="{% url 'pokedex:update-pokemon' pokemon_id.id %}"><button >Update Pokemon</button></a>
+    <a href="{% url 'pokedex:delete-pokemon' pokemon_id.id %}"><button >Delete Pokemon</button></a>
+</p>
+<p>
+    <a href={% url 'pokedex:pokemon-dex' %}><button >Go back to PokeDex</button></a>
+    <a href={% url 'pokedex:pokemon-list' %}><button >Go back to Pokemon List</button></a>
+</p>
+{% endblock %}

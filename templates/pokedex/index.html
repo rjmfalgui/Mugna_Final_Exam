@@ -1,0 +1,13 @@
+<title>Pokedex Home</title>
+{% extends 'pokedex/base.html'%} {% block content %}
+
+<h1>Welcome to the Pokemon Dex</h1>
+<p>
+  <a href={% url 'pokedex:pokemon-search' %}><button type="submit">Search Pokemon</button></a>
+  <a href={% url 'pokedex:pokemon-search-type' %}><button type="submit">Search Pokemon Type</button></a>
+</p>
+<p>
+  <a href={% url 'pokedex:pokemon-list' %}><button>List of Pokemons</button></a>
+  <a href={% url 'pokedex:create-pokemon' %}><button >Create Pokemon</button></a>
+</p>
+{% endblock %}
