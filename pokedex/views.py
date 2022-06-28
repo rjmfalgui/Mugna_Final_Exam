@@ -7,13 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
-from pokedex.decorators import allowed_users, unauthenticated_user, allowed_users
+from pokedex.decorators import allowed_users, unauthenticated_user
 from pokedex.models import Pokemon
 from pokedex.forms import (
     PokemonListForm,
     PokemonDetailForm,
     CreatePokemonForm,
-    PokemonLoginForm,
     UpdatePokemonForm,
     DeletePokemonForm,
     PokemonSearchForm,
@@ -190,8 +189,7 @@ class PokemonRegistration(ListView):
 
         return render(request, self.template_name, {"form": form})
             
-
-@method_decorator(unauthenticated_user, name="dispatch")
+# @method_decorator(unauthenticated_user, name="dispatch")
 class PokemonLogin(ListView):
     form_class = PokemonLoginForm
     initial = {"key": "value"}
@@ -220,30 +218,16 @@ class PokemonLogin(ListView):
         else:
             form = PokemonLoginForm()
         
-        return render(request, self.template_name,{"forms": form})
+        return render(request, self.template_name,{"form": form})
 
 
 class PokemonLogout(ListView):
-    pass
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return HttpResponseRedirect(reverse("pokedex:pokemon-login"))
 
 
-def pokemon_names(request):
-    list_pokemons = []
-    if "name" in request.GET:
-        name = request.GET["name"]
-        payload = {"limit": 151}
-
-        response = requests.get(
-            f"https://pokeapi.co/api/v2/pokemon/{name}", params=payload
-        )
-        pokemons = response.json()
-        line = pokemons["name"]
-
-        for i in line:
-            pokemon_list = Pokemon(
-                id=i["id"],
-            )
-            pokemon_list.save()
-            list_pokemons = Pokemon.objects.all().order_by("id")
-
-    return render(request, "pokedex/index.html", {"list_of_pokemons": list_pokemons})
+# @method_decorator(unauthenticated_user, name="dispatch")
+class PokemonHome(ListView):
+    def get(self, request, *args, **kwargs):
+        return render(request, "pokedex/index.html")
