@@ -10,10 +10,8 @@
       {% csrf_token %} {{ form.as_p }}
       <input type="submit" value="Login" />
     </form>
-    {% comment %}
     <p>
-      Register Here: <a href="{% url 'pokedex:registration' %}"> Register </a>
+      Register Here: <a href={% url 'pokedex:pokemon-registration' %}> <button>Register</button></a>
     </p>
-    {% endcomment %}
   </body>
 </html>

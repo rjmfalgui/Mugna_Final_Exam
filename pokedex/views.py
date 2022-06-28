@@ -18,6 +18,7 @@ from pokedex.forms import (
     PokemonSearchForm,
     PokemonSearchTypeForm,
     PokemonLoginForm,
+    PokemonRegistrationForm,
 )
 
 
@@ -163,7 +164,25 @@ class EvolutionChart(View):
 
 
 class PokemonRegistration(ListView):
-    pass
+    form_class = PokemonRegistrationForm
+    initial = {"key": "value"}
+    template_name = "pokedex/pokemon_registration.html"
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        if request.method == "POST":
+            form = self.form_class(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect("pokedex:pokemon-login")
+            else:
+                return redirect("pokedex:pokemon-registration")
+
+        return render(request, self.template_name, {"form": form})
+            
 
 class PokemonLogin(ListView):
     form_class = PokemonLoginForm
@@ -198,19 +217,6 @@ class PokemonLogin(ListView):
 
 class PokemonLogout(ListView):
     pass
-
-# def registration(request):
-#     if request.method == "POST":
-#         form = RegistrationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect("books:login")
-#         else:
-#             return redirect("books:registration")
-#     else:
-#         form = RegistrationForm()
-
-#     return render(request, "books/register.html", {"form": form})
 
 
 def pokemon_names(request):

@@ -2,10 +2,11 @@ from django.contrib import admin
 from django.urls import path, include
 from pokedex import views
 from pokedex.views import(
+    PokemonLogin,
+    PokemonRegistration,
     PokemonLists,
     PokemonDetails,
     CreatePokemon,
-    PokemonLogin,
     UpdatePokemon,
     DeletePokemon,
     PokemonSearch,
@@ -17,7 +18,8 @@ from pokedex.views import(
 app_name = "pokedex"
 
 urlpatterns = [
-    path("", PokemonLogin.as_view(), name="pokemon-dex"),
+    path("", PokemonLogin.as_view(), name="pokemon-login"),
+    path("pokemon-registration", PokemonRegistration.as_view(), name="pokemon-registration"),
     path("pokedex-home", views.pokemon_names, name="pokemon-dex"),
     path("pokemon-list/", PokemonLists.as_view(), name="pokemon-list"),
     path("details/<int:id>/", PokemonDetails.as_view(), name="pokemon-details"),
