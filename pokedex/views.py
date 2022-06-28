@@ -3,16 +3,21 @@ import requests
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, redirect
-from django.views.generic import View
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.utils.decorators import method_decorator
+from django.views.generic import View, ListView
 from pokedex.models import Pokemon
 from pokedex.forms import (
     PokemonListForm,
     PokemonDetailForm,
     CreatePokemonForm,
+    PokemonLoginForm,
     UpdatePokemonForm,
     DeletePokemonForm,
     PokemonSearchForm,
-    PokemonSearchTypeForm
+    PokemonSearchTypeForm,
+    PokemonLoginForm,
 )
 
 
@@ -157,6 +162,57 @@ class EvolutionChart(View):
     pass
 
 
+class PokemonRegistration(ListView):
+    pass
+
+class PokemonLogin(ListView):
+    form_class = PokemonLoginForm
+    initial = {"key": "value"}
+    template_name = "pokedex/pokemon_login.html"
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        if request.method == "POST":
+            form = self.form_class(request.POST)
+            username = request.POST["username"]
+            password = request.POST["password"]
+            user = authenticate(username=username, password=password)
+            
+            if form.is_valid():
+                if user is not None:
+                    if user.is_active:
+                        login(request, user)
+                        return render(request, "pokedex/index.html", {"username": username})
+                    
+                    else:
+                        return HttpResponse("Incorrect Username and Password")
+        
+        else:
+            form = PokemonLoginForm()
+        
+        return render(request, self.template_name,{"forms": form})
+
+
+class PokemonLogout(ListView):
+    pass
+
+# def registration(request):
+#     if request.method == "POST":
+#         form = RegistrationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("books:login")
+#         else:
+#             return redirect("books:registration")
+#     else:
+#         form = RegistrationForm()
+
+#     return render(request, "books/register.html", {"form": form})
+
+
 def pokemon_names(request):
     list_pokemons = []
     if "name" in request.GET:
@@ -170,13 +226,8 @@ def pokemon_names(request):
         line = pokemons["name"]
 
         for i in line:
-            # for line in pokemons["results"]:
-            # list_pokemons.append(line["name"])
             pokemon_list = Pokemon(
                 id=i["id"],
-                # names=i["name"],
-                # height=i["height"],
-                # weight=i["weight"],
             )
             pokemon_list.save()
             list_pokemons = Pokemon.objects.all().order_by("id")

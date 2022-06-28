@@ -5,6 +5,7 @@ from pokedex.views import(
     PokemonLists,
     PokemonDetails,
     CreatePokemon,
+    PokemonLogin,
     UpdatePokemon,
     DeletePokemon,
     PokemonSearch,
@@ -16,7 +17,8 @@ from pokedex.views import(
 app_name = "pokedex"
 
 urlpatterns = [
-    path("", views.pokemon_names, name="pokemon-dex"),
+    path("", PokemonLogin.as_view(), name="pokemon-dex"),
+    path("pokedex-home", views.pokemon_names, name="pokemon-dex"),
     path("pokemon-list/", PokemonLists.as_view(), name="pokemon-list"),
     path("details/<int:id>/", PokemonDetails.as_view(), name="pokemon-details"),
     path("create-pokemon", CreatePokemon.as_view(), name="create-pokemon"),

@@ -7,7 +7,8 @@ from pokedex.models import Pokemon, PokemonStats, PokemonType
 
 class PokemonAdmin(admin.ModelAdmin):
     fields = ["id", "name", "height", "weight", "type"]
-    search_fields = ["id", "name"]
+    search_fields = ["id", "name", "height", "weight", "type"]
+    list_display = ["id", "name", "height", "weight", "type"]
 
 class PokemonTypeAdmin(admin.ModelAdmin):
     fields = ["name"]
